@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchAllProducts,fetchProductsByFilters, fetchBrands, fetchCategories } from './ProductListAPI';
+import { fetchAllProducts,fetchProductsByFilters, fetchBrands, fetchCategories, fetchProductsById } from './ProductListAPI';
 
 const initialState = {
   products: [],
   status: 'idle',
   totalItems:0,
   brands:[],
-  categories:[]
+  categories:[],
+  selectedProduct:null
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -27,6 +28,15 @@ export const fetchProductsByFiltersAsync = createAsyncThunk(
   'product/fetchProductsByFilters',
   async ({filter,sort,pagination}) => {
     const response = await fetchProductsByFilters(filter,sort,pagination);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+
+export const fetchProductsByIdAsync = createAsyncThunk(
+  'product/fetchProductsById',
+  async (id) => {
+    const response = await fetchProductsById(id);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -98,6 +108,13 @@ export const ProductSlice = createSlice({
         state.status = 'idle';
         state.categories = action.payload;
       })
+      .addCase(fetchProductsByIdAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchProductsByIdAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.selectedProduct = action.payload;
+      })
   },
 });
 
@@ -110,6 +127,7 @@ export const selectAllProducts = (state) => state.product.products;
 export const selectCategories = (state) => state.product.categories;
 export const selectBrands = (state) => state.product.brands;
 export const selectTotalItems = (state) => state.product.totalItems;
+export const selectProductById = (state) => state.product.selectedProduct;
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
 
