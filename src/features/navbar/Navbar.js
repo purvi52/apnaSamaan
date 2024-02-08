@@ -2,6 +2,8 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectItems } from '../cart/CartSlice'
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
@@ -16,8 +18,8 @@ const navigation = [
   { name: 'Reports', href: '#', current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '/' },
-  { name: 'Settings', href: '#' },
+  { name: 'Your Profile', link: '/' },
+  { name: 'Settings', link: '/' },
   { name: 'Sign out', link: '/login' },
 ]
 function classNames(...classes) {
@@ -28,6 +30,9 @@ function classNames(...classes) {
 
 function Navbar({children})
 {
+
+  const items=useSelector(selectItems);
+
 return (
     <>
     <div className="min-h-full">
@@ -79,9 +84,9 @@ return (
         
       </button>
       </Link>
-      <span className="relative inline-flex items-center rounded-md mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-        7
-      </span>
+      {items.length>0 && <span className="relative inline-flex items-center rounded-md mb-5 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+        {items.length}
+      </span>}
 
       {/* Profile dropdown */}
       <Menu as="div" className="relative ml-3">
@@ -172,9 +177,9 @@ return (
       <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
     </button>
     </Link>
-    <span className="relative inline-flex items-center rounded-md  bg-red-50 mb-5 -ml-3 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-        6
-      </span>
+    {items.length>0 && <span className="relative inline-flex items-center rounded-md  bg-red-50 mb-5 -ml-3 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+        {items.length}
+      </span>}
   </div>
   <div className="mt-3 space-y-1 px-2">
     {userNavigation.map((item) => (
