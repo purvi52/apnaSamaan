@@ -33,5 +33,15 @@ export function createUser( userData ) {
       }
     });
   }
+
+  export function signOut(userId) {
+    return new Promise(async (resolve) =>
+    {
+      //remove user session info
+      resolve({ data:'success' });
+    });
+  }
+
+
   
   

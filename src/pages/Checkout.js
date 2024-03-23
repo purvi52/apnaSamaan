@@ -14,7 +14,6 @@ import { selectLoggedInUser, updateUserAsync } from '../features/auth/authSlice'
 import { createOrderAsync, selectCurrentOrder } from '../features/order/orderSlice';
 import { selectUserInfo } from '../features/user/userSlice';
 
-
 // const addresses=[{
 //     name:"Abc",
 //     email:"abc@gmail.com",
@@ -34,10 +33,6 @@ import { selectUserInfo } from '../features/user/userSlice';
 //     phoneNo:9988776654
 // }
 // ]
-
-
-
-
 function Checkout(){
     const dispatch = useDispatch();
     const {
@@ -49,12 +44,10 @@ function Checkout(){
 
     const user=useSelector(selectUserInfo)  
     const [open, setOpen] = useState(true)
-
     const items=useSelector(selectItems)
     const currentOrder= useSelector(selectCurrentOrder)
     const totalAmount= items.reduce((amount,item)=>item.price*item.quantity+amount,0)
     const totalItems=items.reduce((total,item)=>item.quantity+total,0)
-    
     const [selectedAdd, setSelectedAdd]=useState(null)
     const [paymentMethod, setPaymentMethod]= useState('cash')
     const handleQuantity=(e,item)=>{
@@ -63,7 +56,6 @@ function Checkout(){
     const handleRemove=(e,id)=>{
       dispatch(deleteItemFromCartAsync(id))
     }
-
     const handleAddress=(e)=>{
       console.log(e.target.value);
       setSelectedAdd(user.addresses[e.target.value])
@@ -73,7 +65,6 @@ function Checkout(){
       console.log(e.target.value);
       setPaymentMethod(e.target.value);
     }
-
     const handleOrder=(e)=>{
       const order={
         items, 
@@ -84,8 +75,7 @@ function Checkout(){
         selectedAdd,
         status:'pending'
       }
-      dispatch(createOrderAsync(order));
-      
+      dispatch(createOrderAsync(order)); 
     }
     return(
       <>
@@ -106,7 +96,6 @@ function Checkout(){
         <div className="border-b border-gray-900/10 pb-12">
         <h2 className="text-2xl font-semibold leading-7 text-gray-900">Personal Information</h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
-
         <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-3">
             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
@@ -312,9 +301,6 @@ function Checkout(){
           </div>
         </div>
       </div>
-
-      
-
     </form>
     </div>
     <div className="lg:col-span-2">
