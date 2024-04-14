@@ -18,7 +18,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom';
-import { ITEM_PER_PAGE } from '../../../app/constants';
+import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
 
 const sortOptions = [
   { name: 'Best Rating',sort:'rating',order:'desc', current: false },
@@ -93,7 +93,7 @@ export default function AdminProductList() {
   }
 
   useEffect(()=>{
-    const pagination={_page:page,_limit:ITEM_PER_PAGE}
+    const pagination={_page:page,_limit:ITEMS_PER_PAGE}
     dispatch(fetchProductsByFiltersAsync({filter,sort,pagination}))
   },[dispatch,filter,sort,page])
   
@@ -366,7 +366,7 @@ function DesktopFilter({handleFilter,filters}){
 }
 
 function Pagination({handlePage,page,setPage,totalItems}){
-  const totalPages=Math.ceil(totalItems/ITEM_PER_PAGE)
+  const totalPages=Math.ceil(totalItems/ITEMS_PER_PAGE)
   return (
     <div>
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
@@ -387,8 +387,8 @@ function Pagination({handlePage,page,setPage,totalItems}){
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">{(page-1)*ITEM_PER_PAGE+1}</span> to 
-            <span className="font-medium">{page*ITEM_PER_PAGE>totalItems?totalItems:page*ITEM_PER_PAGE>totalItems}</span> of{' '}
+            Showing <span className="font-medium">{(page-1)*ITEMS_PER_PAGE+1}</span> to 
+            <span className="font-medium">{page*ITEMS_PER_PAGE>totalItems?totalItems:page*ITEMS_PER_PAGE>totalItems}</span> of{' '}
             <span className="font-medium">{totalItems }</span> results
           </p>
         </div>
@@ -464,7 +464,9 @@ function ProductGrid({products}){
     </p>
   </div>
   <div>
-  <p className="text-sm font-medium text-gray-900">${Math.round(product.price*(1-product.discountPercentage/100))}</p>
+  <p className="text-sm font-medium text-gray-900">${
+    discountedPrice (product)
+    }</p>
   <p className="text-sm font-medium text-gray-500 line-through">${product.price}</p>
   </div>
 </div>
