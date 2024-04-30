@@ -4,6 +4,7 @@ import { addToCart,fetchItemsByUserId, updateCart,deleteItemFromCart, resetCart}
 const initialState = {
   status: 'idle',
   items: [],
+  cartLoaded:false
 };
 export const addToCartAsync = createAsyncThunk(
   'cart/addToCart',
@@ -75,6 +76,11 @@ export const cartSlice = createSlice({
       .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.items=action.payload;
+        state.cartLoaded=true;
+      })
+      .addCase(fetchItemsByUserIdAsync.rejected, (state, action) => {
+        state.status = 'idle';
+        state.cartLoaded=true;
       })
       .addCase(updateCartAsync.pending, (state) => {
         state.status = 'loading';
@@ -108,7 +114,7 @@ export const { increment, decrement, incrementByAmount } = cartSlice.actions;
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectItems = (state) => state.cart.items;
-
+export const selectCartLoaded=(state)=>state.cart.cartLoaded;
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
 

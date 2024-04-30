@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   increment,
-  checkUserAsync,
+  loginUserAsync,
   selectError,
   selectLoggedInUser,
 } from '../authSlice';
@@ -40,7 +40,7 @@ export default function Login() {
         <form noValidate 
         onSubmit={handleSubmit((data)=>{
           dispatch(
-            checkUserAsync({email:data.email, password:data.password})
+            loginUserAsync({email:data.email, password:data.password})
             )
           console.log(data)})}
           className="space-y-6" action="#" method="POST">

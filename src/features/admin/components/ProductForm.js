@@ -9,7 +9,7 @@ import {
     clearSelectedProduct} from "../../product-list/ProductListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from 'react-hook-form';
-import { checkUserAsync } from "../../auth/authSlice";
+import { loginUserAsync } from "../../auth/authSlice";
 import { useEffect } from "react";
 function ProductForm(){
     const {

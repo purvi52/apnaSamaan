@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   deleteItemFromCartAsync,
+  selectCartLoaded,
   selectItems,
   updateCartAsync
 } from './CartSlice.js';
@@ -14,6 +15,7 @@ export default function Cart() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true)
   const items=useSelector(selectItems)
+  const cartLoaded=useSelector(selectCartLoaded)
   const totalAmount = items.reduce(
     (amount, item) => discountedPrice(item.product) * item.quantity + amount,
     0
@@ -28,7 +30,7 @@ export default function Cart() {
 
   return (
     <>
-    {!items.length && <Navigate to='/' replace={true}></Navigate>}
+    {!items.length && cartLoaded && <Navigate to='/' replace={true}></Navigate>}
             <div className="mx-auto mt-7 max-w-7xl px-4 py-6 bg-white sm:px-6 lg:px-8">
                 <h2 className='text-2xl font-bold mb-5'>Shopping Cart</h2>
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
