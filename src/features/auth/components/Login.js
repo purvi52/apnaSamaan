@@ -83,7 +83,7 @@ export default function Login() {
               />
               <p className='text-red-500'>{errors?.password?.message}</p>
             </div>
-            <p className='text-red-500'>{error?.message}</p>
+            <p className='text-red-500'>{error || error?.message}</p>
           </div>
 
           <div>

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUserInfo } from '../userSlice';
-import { updateUserAsync } from '../../auth/authSlice';
+import { updateUserAsync } from '../userSlice';
 import { useForm } from 'react-hook-form';
 
 export default function UserProfile() {
-  const user=useSelector(selectUserInfo)
+  const userInfo=useSelector(selectUserInfo)
   const dispatch = useDispatch();
   const [selectedAdd, setSelectedAdd]=useState(null)
   const [selectedEditIndex, setSelectedEditIndex]=useState(-1);
@@ -22,20 +22,20 @@ export default function UserProfile() {
   } = useForm();
   
   const handleEdit=(addressUpdate,index)=>{
-    const newUser= {...user, addresses:[...user.addresses]} 
+    const newUser= {...userInfo, addresses:[...userInfo.addresses]} 
     newUser.addresses.splice(index,1,addressUpdate);
     dispatch(updateUserAsync(newUser))
     setSelectedEditIndex(-1);
   }
   const handleRemove=(e,index)=>{
-    const newUser= {...user, addresses:[...user.addresses]} 
+    const newUser= {...userInfo, addresses:[...userInfo.addresses]} 
     newUser.addresses.splice(index,1);
     dispatch(updateUserAsync(newUser))
   }
 
   const handleEditForm=(index)=>{
     setSelectedEditIndex(index);
-    const address=user.addresses[index]
+    const address=userInfo.addresses[index]
     setValue('name',address.name);
     setValue('email',address.email);
     setValue('city',address.city);
@@ -46,7 +46,7 @@ export default function UserProfile() {
   };
 
   const handleAdd=(address)=>{
-    const newUser= {...user, addresses:[...user.addresses,address]} 
+    const newUser= {...userInfo, addresses:[...userInfo.addresses,address]} 
     dispatch(updateUserAsync(newUser))
     setShowAddAddressForm(false)
   }
@@ -57,13 +57,13 @@ export default function UserProfile() {
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                    
                 <h2 className='text-2xl font-bold mb-5'>
-                  Name: {user.name?user.name:'New User'}
+                  Name: {userInfo.name?userInfo.name:'New User'}
                 </h2>
                 <h3 className='text-xl font-bold text-red-900 mb-5'>
-                email address: {user?.email}
+                email address: {userInfo?.email}
                 </h3>
-                {user.role==='admin' && <h3 className='text-xl font-bold text-red-900 mb-5'>
-                role: {user?.role}
+                {userInfo.role==='admin' && <h3 className='text-xl font-bold text-red-900 mb-5'>
+                role: {userInfo?.role}
                 </h3>}
                 
                 </div>
@@ -211,8 +211,8 @@ export default function UserProfile() {
 
 
                     <p className="mt-0.5 text-sm text-gray-500">Your Addresses: </p>
-                    {user.addresses.map((address,index)=>
-                    <div>
+                    {userInfo.addresses.map((address,index)=>
+                    <div key={index}>
                     {selectedEditIndex===index? (
                       <form className='bg-white px-4 mt-7 py-4' noValidate 
                     onSubmit={handleSubmit((data)=>{

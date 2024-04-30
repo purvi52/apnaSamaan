@@ -17,7 +17,7 @@ export function createUser( userData ) {
     return new Promise(async (resolve, reject) => {
       try
       {const response = await fetch(
-        "http://localhost:8080/users/auth/login",
+        "http://localhost:8080/auth/login",
         {
           method:'POST',
           body:JSON.stringify(loginInfo),
@@ -30,7 +30,7 @@ export function createUser( userData ) {
         const data = await response.json();
         resolve({data})
       }else{
-        const error = await response.json();
+        const error = await response.text();
         reject(error);
       }
     }

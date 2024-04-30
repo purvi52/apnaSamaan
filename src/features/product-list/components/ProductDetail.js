@@ -43,21 +43,34 @@ export default function ProductDetail() {
   const product=useSelector(selectProductById)
   const dispatch=useDispatch()
   const params=useParams();
-  const user=useSelector(selectLoggedInUser)
   const items=useSelector(selectItems)
 
   const handleCart=(e)=>{
     e.preventDefault();
-    if(items.findIndex(item=>item.productId===product.id)<0)
-    {
-      const newItem={...product,productId:product.id, quantity:1,user:user.id}
-      delete newItem['id']
-      dispatch(addToCartAsync(newItem))
-    }
+    
+    // let isProductInCart=false;
+    // for(let i=0;i<items.length;i++)
+    // {
+    //   if(items[i].product.id === product.id)
+    //   {
+    //     isProductInCart=true;
+    //     break;
+    //   }
+    // }
+      if (items.findIndex((item) => item.product.id === product.id) < 0) {
+        console.log({ items, product });
+        const newItem = {
+          product: product.id,
+          quantity: 1
+        };
+        dispatch(addToCartAsync(newItem));
+        // TODO: it will be based on server response of backend
+        // alert.error('Item added to Cart');
+      }
     else{
       console.log("already added");
     }
-  }
+  };
 
   useEffect(()=>{
     dispatch(fetchProductByIdAsync(params.id))

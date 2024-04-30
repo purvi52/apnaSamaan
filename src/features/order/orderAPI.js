@@ -6,7 +6,6 @@ export function createOrder( order ) {
       headers:{'content-type':'application/json'},
     })
     const data=await response.json();
-
     resolve({data})
   });
 }
