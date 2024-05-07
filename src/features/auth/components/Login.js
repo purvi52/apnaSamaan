@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   increment,
-  loginUserAsync,
+  checkUserAsync,
   selectError,
   selectLoggedInUser,
 } from '../authSlice';
@@ -28,7 +28,7 @@ export default function Login() {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-10 w-auto"
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+          src="/ecommerce.png"
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -40,7 +40,7 @@ export default function Login() {
         <form noValidate 
         onSubmit={handleSubmit((data)=>{
           dispatch(
-            loginUserAsync({email:data.email, password:data.password})
+            checkUserAsync({email:data.email, password:data.password})
             )
           console.log(data)})}
           className="space-y-6" action="#" method="POST">

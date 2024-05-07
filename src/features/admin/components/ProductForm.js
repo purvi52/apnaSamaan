@@ -10,7 +10,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from 'react-hook-form';
 import { loginUserAsync } from "../../auth/authSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Modal from "../../common/Modal";
 function ProductForm(){
     const {
         register,
@@ -25,6 +26,7 @@ function ProductForm(){
     const dispatch= useDispatch();
     const params=useParams();
     const selectedProduct=useSelector(selectProductById)
+    const [openModal,setOpenModal]=useState(null);
 
     useEffect(() => {
         if (params.id) {
@@ -58,6 +60,7 @@ function ProductForm(){
       }
 
     return (
+      <>
 <form
 noValidate
       onSubmit={handleSubmit((data) => {
@@ -95,6 +98,7 @@ noValidate
       <h2 class="text-base font-semibold leading-7 text-gray-900">Add Product</h2>
 
       <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+      {selectedProduct?.deleted && <h2 className="text-red-500 sm:col-span-6">This product is deleted</h2>}
         <div class="sm:col-span-6">
           <label for="title" class="block text-sm font-medium leading-6 text-gray-900">
           Product Name
@@ -319,19 +323,30 @@ noValidate
         Cancel
     </button>
 
-    {selectedProduct && <button 
-        onClick={handleDelete}
+    {selectedProduct && !selectedProduct.deleted && (<button 
+        onClick={(e)=>{e.preventDefault(); setOpenModal(true)}}
         className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
         Delete
-    </button>}
+    </button>)}
 
     <button 
         type="submit" 
         className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
         Save
     </button>
+   
   </div>
 </form>
+<Modal
+      title={`Delete ${selectedProduct?.title}`}
+      message="Are you sure you want to delete this Product item ?"
+      dangerOption="Delete"
+      cancelOption="Cancel"
+      dangerAction={handleDelete}
+      cancelAction={()=>setOpenModal(null)}
+      showModal={openModal}
+  ></Modal>
+</>
     );
 }
 export default ProductForm;

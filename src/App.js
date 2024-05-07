@@ -20,7 +20,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import Protected from './features/auth/components/Protected';
 import { fetchItemsByUserIdAsync } from './features/cart/CartSlice';
 import { useSelector } from 'react-redux';
-import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from './features/auth/authSlice';
+import { selectLoggedInUser} from './features/auth/authSlice';
 import PageNotFound from './pages/404';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import UserOrdersPage from './pages/UserOrdersPage';
@@ -35,6 +35,13 @@ import AdminProductDetailPage from './pages/AdminProductDetailPage';
 import ProductForm from './features/admin/components/ProductForm';
 import AdminProductFormPage from './pages/AdminProductFormPage';
 import AdminOrdersPage from './pages/AdminOrdersPage';
+import { positions,Provider } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
+
+const options={
+  timeout:5000,
+  position:positions.BOTTOM_LEFT
+}
 const router= createBrowserRouter([
   {
     path:"/",
@@ -141,11 +148,11 @@ function App() {
 
   const dispatch=useDispatch();
   const user=useSelector(selectLoggedInUser);
-  const userChecked=useSelector(selectUserChecked);
+  // const userChecked=useSelector(selectUserChecked);
 
-  useEffect(()=>{
-    dispatch(checkAuthAsync())
-  },[dispatch])
+  // useEffect(()=>{
+  //   dispatch(checkAuthAsync())
+  // },[dispatch])
 
   useEffect(()=>{
     if(user)
@@ -154,10 +161,12 @@ function App() {
       dispatch(fetchLoggedInUserAsync())
     }
     
-  },[dispatch,user])
+  },[dispatch,user]);
   return (
     <div className="App">
-     { userChecked && <RouterProvider router={router} />}
+     <Provider template={AlertTemplate} {...options}>
+     <RouterProvider router={router} />
+     </Provider>
     </div>
   );
 }

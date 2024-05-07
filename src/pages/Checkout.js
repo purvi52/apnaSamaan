@@ -69,7 +69,7 @@ function Checkout(){
           console.log(data);
           dispatch(
             updateUserAsync({...user,addresses:[...user.addresses,data]}) 
-            // loginUserAsync({email:data.email, password:data.password})
+            // checkUserAsync({email:data.email, password:data.password})
             )
             reset();
           })}>

@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchProductByIdAsync, selectProductById } from '../ProductListSlice'
+import { fetchProductByIdAsync, selectProductById, selectProductListStatus } from '../ProductListSlice'
 import { useParams } from 'react-router-dom'
 import { addToCartAsync, selectItems } from '../../cart/CartSlice'
 import {selectLoggedInUser} from '../../auth/authSlice' 
 import { discountedPrice } from '../../../app/constants'
+import { useAlert } from 'react-alert'
+import { Grid } from 'react-loader-spinner'
+
 const colors= [
     { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
     { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -44,6 +47,8 @@ export default function ProductDetail() {
   const dispatch=useDispatch()
   const params=useParams();
   const items=useSelector(selectItems)
+  const alert=useAlert();
+  const status = useSelector(selectProductListStatus);
 
   const handleCart=(e)=>{
     e.preventDefault();
@@ -65,10 +70,10 @@ export default function ProductDetail() {
         };
         dispatch(addToCartAsync(newItem));
         // TODO: it will be based on server response of backend
-        // alert.error('Item added to Cart');
+        alert.success('Item added to Cart');
       }
     else{
-      console.log("already added");
+      alert.error("Item already added")
     }
   };
 
@@ -77,6 +82,18 @@ export default function ProductDetail() {
   },[dispatch,params.id])
   return (
     <div className="bg-white">
+        {status === 'loading' ? (
+        <Grid
+          height="80"
+          width="80"
+          color="rgb(79, 70, 229) "
+          ariaLabel="grid-loading"
+          radius="12.5"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      ) : null}
       {product && <div className="pt-6">
         <nav aria-label="Breadcrumb">
           <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">

@@ -10,6 +10,7 @@ import {
   selectCategories,
   fetchBrandsAsync,
   fetchCategoriesAsync,
+  selectProductListStatus,
 } from '../ProductListSlice';
 
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
@@ -19,7 +20,7 @@ import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from '@heroicons/react/20
 import { Link } from 'react-router-dom';
 import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
 import Pagination from '../../common/Pagination';
-
+import { Grid } from 'react-loader-spinner';
 const sortOptions = [
   { name: 'Best Rating',sort:'rating',order:'desc', current: false },
   { name: 'Price: Low to High',sort:'price',order:'asc', current: false },
@@ -43,7 +44,8 @@ export default function ProductList() {
   const [filter,setFilter]=useState({});
   const [sort,setSort]=useState({});
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [page,setPage]=useState(1)
+  const [page,setPage]=useState(1);
+  const status=useSelector(selectProductListStatus);
 
   const filters = [
     {
@@ -111,6 +113,7 @@ export default function ProductList() {
       <div className="bg-white">
       <div>
         {/* Mobile filter dialog */}
+
         <MobileFilter handleFilter={handleFilter} mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} filters={filters}></MobileFilter>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -186,7 +189,7 @@ export default function ProductList() {
               <DesktopFilter handleFilter={handleFilter} filters={filters}></DesktopFilter>
 
               {/* Product grid */}
-              <ProductGrid products={products}></ProductGrid>
+              <ProductGrid products={products} status={status}></ProductGrid>
             </div>
           </section>
           {/* Product section+ilter ends here */}
@@ -358,7 +361,7 @@ function DesktopFilter({handleFilter,filters}){
 
 
 
-function ProductGrid({products}){
+function ProductGrid({products,status}){
   return (
       <div className="lg:col-span-3">
 
@@ -367,6 +370,18 @@ function ProductGrid({products}){
 
 
 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+{status === 'loading' ? (
+            <Grid
+              height="80"
+              width="80"
+              color="rgb(79, 70, 229) "
+              ariaLabel="grid-loading"
+              radius="12.5"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          ) : null}
 {products.map((product) => (
 <Link to={`/product-detail/${product.id}`}>
 <div key={product.id} className="group relative border-2 border-gray-100 p-3">
